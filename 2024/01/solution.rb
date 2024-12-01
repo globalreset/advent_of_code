@@ -6,7 +6,7 @@ module Year2024
     end
 
     def part_2
-      lists = data.transpose.map(&:sort)
+      lists = data.transpose
       lists[0].map {|x| lists[1].count(x) * x }.sum
     end
 
