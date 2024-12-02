@@ -4,7 +4,7 @@ module Year2024
 
     def check_report(report)
       diffs = report.each_cons(2).map{ |a, b| b - a }
-      diffs.all? { |v| v!=0 && v.abs <= 3 && v.positive? == diffs.first.positive?  && v.negative? == diffs.first.negative? }
+      diffs.all? { |v| v!=0 && v.abs <= 3 && v.positive? == diffs.first.positive? }
     end
 
     def part_1
@@ -13,7 +13,10 @@ module Year2024
 
     def part_2
       data.map{ |report|
-        check_report(report) || (0...report.size).any?{ |i| check_report(report[0...i] + report[i+1..]) } 
+        check_report(report) || 
+          (0...report.size).any?{ |i| 
+            check_report(report.first(i) + report.drop(i+1)) 
+          } 
       }.count(true)
     end
 
