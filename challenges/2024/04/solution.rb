@@ -11,35 +11,28 @@ module Year2024
     end
 
     def part_1
-      count = 0
-      data.size.times { |x|
-        data[0].size.times { |y|
+      (0...data.size).sum { |x|
+        (0...data[0].size).sum { |y|
           [[1, 0], [-1, 0], [0, 1], [0, -1], 
-           [1, 1], [1, -1], [-1, 1], [-1, -1]].each { |dx, dy|
-            count += 1 if check(x, y, dx, dy, "XMAS".chars)
+           [1, 1], [1, -1], [-1, 1], [-1, -1]].count { |dx, dy|
+            check(x, y, dx, dy, "XMAS".chars)
           }
         }
       }
-      count
     end
 
     def part_2
-      count = 0
-      (1..(data.size-2)).each { |x|
-        (1..(data[0].size-2)).each { |y|
-          if(data[x][y]=="A")
-            diags = [
-              data[x-1][y+1], data[x+1][y+1],
-              data[x+1][y-1], data[x-1][y-1]
-            ]
-            count += 1 if(diags==["M", "M", "S", "S"] ||
-                          diags==["S", "M", "M", "S"] ||
-                          diags==["S", "S", "M", "M"] ||
-                          diags==["M", "S", "S", "M"])
-          end
+      crosses = [["M", "M", "S", "S"], ["S", "M", "M", "S"],
+                 ["S", "S", "M", "M"], ["M", "S", "S", "M"]]
+      (1..(data.size-2)).sum { |x|
+        (1..(data[0].size-2)).count { |y|
+          diags = [
+            data[x-1][y+1], data[x+1][y+1],
+            data[x+1][y-1], data[x-1][y-1]
+          ]
+          data[x][y]=="A" && crosses.include?(diags)
         }
       }
-      count
     end
 
     private
