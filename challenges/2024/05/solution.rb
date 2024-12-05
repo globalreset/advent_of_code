@@ -30,6 +30,10 @@ module Year2024
           newPrint.insert(newIdx, n)
         }
         newPrint[newPrint.size/2]
+        # solution I got inspired to try after I was done, leaving here to remind me
+        #print.sort { |a,b|
+        #  (data["rules"][a]||[]).include?(b) ? -1 : (data["rules"][b]||[]).include?(a) ? 1 : 0
+        #}[print.size/2]
       }.compact.sum
     end
 
