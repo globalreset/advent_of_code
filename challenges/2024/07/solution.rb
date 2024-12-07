@@ -2,33 +2,31 @@
 module Year2024
   class Day07 < Solution
 
-    def test_equation(result, operands, operators)
-      result == operators.zip(operands[1..]).reduce(operands[0]) { |acc, (op, num)|
-        return false if acc > result
-        case op
-        when :add
-          acc + num
-        when :mul
-          acc * num
-        when :concat
-          "#{acc}#{num}".to_i
+    def find_eq(result, operands, operators, acc)
+      return false if acc > result
+      operators.any? { |op|
+        tmp = if(op == :concat)
+                "#{acc}#{operands[0]}".to_i
+              else
+                acc.send(op, operands[0])
+              end
+        if(operands.size == 1)
+          tmp == result
+        else
+          find_eq(result, operands[1..], operators, tmp)
         end
       }
     end
 
     def part_1
       data.sum { |result, operands|
-        [:add, :mul].repeated_permutation(operands.size-1).any? { |operators|
-          test_equation(result, operands, operators)
-        } ? result : 0
+        find_eq(result, operands[1..], [:+, :*], operands[0]) ? result : 0
       }
     end
 
     def part_2
       data.sum { |result, operands|
-        [:add, :mul, :concat].repeated_permutation(operands.size-1).any? { |operators|
-          test_equation(result, operands, operators)
-        } ? result : 0
+        find_eq(result, operands[1..], [:+, :*, :concat], operands[0]) ? result : 0
       }
     end
 
