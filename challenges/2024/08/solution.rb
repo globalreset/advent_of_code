@@ -23,9 +23,9 @@ module Year2024
       antenna.each.with_object(Set.new) { |coords, antinodes|
         coords.permutation(2).each { |a, b|
           (0..).each { |step|
-            anti = a + step*(b - a)
-            break unless in_bounds?(max, anti)
-            antinodes << anti
+            c = a - step*(b - a)
+            break unless in_bounds?(max, c)
+            antinodes << c
           }
         }
       }.size
