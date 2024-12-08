@@ -2,7 +2,7 @@
 module Year2024
   class Day08 < Solution
     def in_bounds?(max, pos)
-      pos.real >= 0 && pos.real < max.real && pos.imag >= 0 && pos.imag < max.imag
+      pos[0].between?(0, max[0]) && pos[1].between?(0, max[1])
     end
 
     def part_1
@@ -22,10 +22,10 @@ module Year2024
       max, antenna = data
       antenna.each.with_object(Set.new) { |coords, antinodes|
         coords.permutation(2).each { |a, b|
-          (0..).each { |step|
-            anti = a + step*(b - a)
-            break unless in_bounds?(max, anti)
-            antinodes << anti
+          (0..).each { |step| # start at 0 to get initial antenna
+            c = a - step*(b - a)
+            break unless in_bounds?(max, c)
+            antinodes << c
           }
         }
       }.size
@@ -36,10 +36,10 @@ module Year2024
       # and a hash array where key is antenna char
       # and value is array of coords (as complex numbers)
       def process_dataset(set)
-        [ (set.size + set[0].size*1i), 
+        [ Vector[set.size-1, set[0].size-1], 
           set.each_with_index.with_object({}) { |(row, y), hash|
             row.chars.each_with_index { |col, x| 
-              (hash[col] ||= []) << y + x*1i if(col != ".") 
+              (hash[col] ||= []) << Vector[y, x] if(col != ".") 
             }
           }.values ]
       end
