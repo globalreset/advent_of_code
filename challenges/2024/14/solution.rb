@@ -6,76 +6,53 @@ module Year2024
 
     MAX_X = 101
     MAX_Y = 103
-    Q = [ 
-      [(0..((MAX_X-2)/2)), (0..((MAX_Y-2)/2))],
-      [(((MAX_X+1)/2)...MAX_X), (0..((MAX_Y-2)/2))],
-      [(0..((MAX_X-2)/2)), (((MAX_Y+1)/2)...MAX_Y)],
-      [(((MAX_X+1)/2)...MAX_X), (((MAX_Y+1)/2)...MAX_Y)]
-      ]
 
     def part_1
-      robots = data.map(&:dup)
-      safety_factor = nil
-      100.times { |i|
-        quads = [0,0,0,0]
-        robots = robots.map { |robot|
-          robot[0] += robot[1]
-          robot[0][0] = robot[0][0] % MAX_X
-          robot[0][1] = robot[0][1] % MAX_Y
-          Q.each.with_index { |quad, i|
-            if(quad[0].include?(robot[0][0]) && quad[1].include?(robot[0][1]))
-              quads[i] += 1
-            end
-          }
-          robot
-        }
-        safety_factor = quads.map { |q| q == 0 ? nil : q }.compact.reduce(&:*)
+      robots = data.map { |px, py, vx, vy|
+        px = (px + 100*vx) % MAX_X
+        py = (py + 100*vy) % MAX_Y
+        [px, py]
       }
-      safety_factor
+      [ 
+        [(0..((MAX_X-2)/2)), (0..((MAX_Y-2)/2))],
+        [(((MAX_X+1)/2)...MAX_X), (0..((MAX_Y-2)/2))],
+        [(0..((MAX_X-2)/2)), (((MAX_Y+1)/2)...MAX_Y)],
+        [(((MAX_X+1)/2)...MAX_X), (((MAX_Y+1)/2)...MAX_Y)]
+      ].map { |quad|
+        cnt = robots.count { |px,py|
+         (quad[0].include?(px) && quad[1].include?(py))
+        }
+        cnt == 0 ? nil : cnt
+      }.compact.reduce(&:*)
     end
 
     def part_2
-      robots = data
-      safety_factor = nil
-      step = 0
-      saved_grid = nil
-      (MAX_X*MAX_Y).times{ |i|
-        grid = {}
-        quads = [0,0,0,0]
-        robots = robots.map { |robot|
-          robot[0] += robot[1]
-          robot[0][0] = robot[0][0] % MAX_X
-          robot[0][1] = robot[0][1] % MAX_Y
-          grid[robot[0]] = "R"
-          Q.each.with_index { |quad, i|
-            if(quad[0].include?(robot[0][0]) && quad[1].include?(robot[0][1]))
-              quads[i] += 1
-            end
-          }
-          robot
-        }
-        sf = quads.map { |q| q == 0 ? nil : q }.compact.reduce(&:*)
-        if(safety_factor.nil? || sf < safety_factor)
-          safety_factor = sf
-          step = i + 1
-          safety_factor = sf
-          saved_grid = grid
-        end
+      # first attempt was (MAX_X*MAX_Y) loops and save off the result
+      # with the lowest safety factor. But when the robots are making
+      # a picture, it's reasonable to assume they are all contributing,
+      # so not stacked up anywhere. So instead find the first instance
+      # where this is true.
+      robots = nil
+      step = (1..).find { |i|
+        robots = data.map { |px, py, vx, vy|
+          px = (px + i*vx) % MAX_X
+          py = (py + i*vy) % MAX_Y
+          [px, py]
+        }.to_set
+        (robots.size == data.size) # all robots are visible (non-stacked)
       }
-
-      #(0...MAX_Y).each { |y|
-      #  (0...MAX_X).each { |x|
-      #    print saved_grid[Vector[x, y]] || "."
-      #  }
-      #  puts
-      #}
+      (0...MAX_Y).each { |y|
+        (0...MAX_X).each { |x|
+          print robots.include?([x, y]) && "R" || "."
+        }
+        puts
+      }
       step
     end
 
     private
-      # Processes each line of the input file and stores the result in the dataset
       def process_input(line)
-        line.split(" ").map{ |l| l.scan(/-?\d+/) }.map{ |x,y| Vector[x.to_i,y.to_i] }
+        line.scan(/-?\d+/).map(&:to_i)
       end
   end
 end
