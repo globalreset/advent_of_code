@@ -41,7 +41,7 @@ module Year2024
       goal = grid.select { |k, v| v == 'E' }.keys.first
 
       score, dir, path = find_path(data, start, 0, goal)
-      return score
+      score
     end
 
     def part_2
