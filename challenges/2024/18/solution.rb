@@ -30,17 +30,8 @@ module Year2024
     end
 
     def part_2
-      min, max = 1024, data.size
-      byteCnt = loop do
-        mid = (max + min)/2
-        if (find_path(data[0...mid].to_set) == nil)
-          max = mid
-        else
-          min = mid
-        end
-        break min + 1 if max - min <= 1
-      end
-      "#{data[byteCnt-1][0]},#{data[byteCnt-1][1]}"
+      byteCnt = (1024...data.size).bsearch { |i| find_path(data[0..i].to_set) == nil }
+      "#{data[byteCnt][0]},#{data[byteCnt][1]}"
     end
 
     private
