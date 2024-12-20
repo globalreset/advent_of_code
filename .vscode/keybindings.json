@@ -1,0 +1,7 @@
+[
+    {
+        "key": "shift+alt+cmd+b",
+        "command": "workbench.action.tasks.runTask",
+        "args": ["Show AOC Output"]
+    }
+]

@@ -1,0 +1,56 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Run Current AOC Solution",
+            "type": "shell",
+            "command": "rake",
+            "args": [
+                "'exec[${relativeFile}]'"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared",
+                "clear": true
+            },
+            "problemMatcher": {
+                "owner": "ruby",
+                "pattern": {
+                    "regexp": "^(.+\\.rb):(\\d+):in\\s+['\"`](.+)['\"`]:\\s+(.+)\\s+\\((.+)\\)$",
+                    "file": 1,
+                    "line": 2,
+                    "message": 4,
+                    "code": 5
+                }
+            }
+        },
+        {
+            "label": "Show AOC Output",
+            "type": "shell",
+            "command": "rake",
+            "args": [
+                "'output[${relativeFile}]'"
+            ],
+            "group": "test",
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared",
+                "clear": true
+            },
+            "problemMatcher": {
+                "owner": "ruby",
+                "pattern": {
+                    "regexp": "^(.+\\.rb):(\\d+):in\\s+['\"`](.+)['\"`]:\\s+(.+)\\s+\\((.+)\\)$",
+                    "file": 1,
+                    "line": 2,
+                    "message": 4,
+                    "code": 5
+                }
+            }
+        }
+    ]
+}

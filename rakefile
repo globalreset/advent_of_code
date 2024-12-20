@@ -1,0 +1,35 @@
+desc "Run a specific solution file (e.g., rake run[challenges/2024/19/solution.rb])"
+task :exec, [:file_path] do |t, args|
+  # Convert to absolute path if relative path given
+  full_path = File.expand_path(args.file_path)
+  
+  # Extract year and day from path using regex
+  if full_path =~ %r{challenges/(\d{4})/(\d+)/solution\.rb$}
+    year = $1
+    day = $2.to_i
+    
+    # Run the AOC command
+    sh "aoc exec #{year} #{day}"
+  else
+    puts "Error: Invalid file path. Expected format: challenges/YYYY/DD/solution.rb"
+    exit 1
+  end
+end
+
+desc "Run a specific solution file (e.g., rake run[challenges/2024/19/solution.rb])"
+task :output, [:file_path] do |t, args|
+  # Convert to absolute path if relative path given
+  full_path = File.expand_path(args.file_path)
+  
+  # Extract year and day from path using regex
+  if full_path =~ %r{challenges/(\d{4})/(\d+)/solution\.rb$}
+    year = $1
+    day = $2.to_i
+    
+    # Run the AOC command
+    sh "aoc output #{year} #{day}"
+  else
+    puts "Error: Invalid file path. Expected format: challenges/YYYY/DD/solution.rb"
+    exit 1
+  end
+end
