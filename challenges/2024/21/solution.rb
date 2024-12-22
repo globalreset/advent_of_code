@@ -87,9 +87,5 @@ module Year2024
       solve(25)
     end
 
-    private
-      def data
-        @data ||= File.readlines(File.join(__dir__, 'input.txt')).map(&:strip)
-      end
   end
 end
