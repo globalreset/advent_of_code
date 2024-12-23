@@ -34,13 +34,9 @@ module Year2024
         ((net[a] ||= Set.new) << b) && ((net[b] ||= Set.new) << a)
       }
 
-      max_group = []
-      net.keys.sort_by { |n| -net[n].size }.map { |start|
-        # skip any node with starting network < current max
-        next if net[start].size + 1 <= max_group.size
-        max_group = [max_group, build_group(net[start], [start], net)].max_by(&:size)
-      }
-      max_group.sort.join(",")
+      net.keys.map { |start|
+        build_group(net[start], [start], net)
+      }.max_by(&:size).sort.join(",")
 
       # For next time, remind myself that NetworkX exists
       # require 'networkx'
