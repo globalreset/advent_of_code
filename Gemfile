@@ -7,6 +7,7 @@ git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
 gem 'aoc_rb'
 gem 'matrix'
 gem 'memoized'
+gem 'networkx'
 gem 'ostruct'
 gem 'rake'
 gem 'rubocop'

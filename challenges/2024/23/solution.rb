@@ -1,6 +1,4 @@
 # frozen_string_literal: true
-require 'set'
-
 module Year2024
   class Day23 < Solution
     def part_1
@@ -28,7 +26,7 @@ module Year2024
         newNodes = nodes & net[n]
         nodes -= [n] # remove from future consideration as it's redundant
         build_group(newNodes, group + [n], net)
-      }.max_by { |g| g.size }
+      }.max_by(&:size)
     end
 
     def part_2
@@ -40,9 +38,19 @@ module Year2024
       net.keys.sort_by { |n| -net[n].size }.map { |start|
         # skip any node with starting network < current max
         next if net[start].size + 1 <= max_group.size
-        max_group = [max_group, build_group(net[start], [start], net)].max_by { |g| g.size }
+        max_group = [max_group, build_group(net[start], [start], net)].max_by(&:size)
       }
       max_group.sort.join(",")
+
+      # For next time, remind myself that NetworkX exists
+      # require 'networkx'
+      # g = NetworkX::Graph.new
+      # data.each { |line|
+      #   g.add_edge(*line.split("-"))
+      # }
+
+      # NetworkX.find_cliques(g).max_by(&:size).sort.join(",")
+
     end
   end
 end
